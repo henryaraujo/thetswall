@@ -1,0 +1,51 @@
+.row{
+  display: flex;
+  margin-bottom: 1px;
+}
+
+.row.odd {
+  padding-left: 15px;
+}
+
+.col{
+  height: 30px;
+  width: 30px;
+  margin-left: 1px;
+  margin-right: 1px;
+  background-color: bisque;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.col > .label{
+  position: absolute;
+  bottom: 50%;
+  transform: translateY(50%);
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: small;
+  letter-spacing: -3px;
+}
+
+.last-row > .col{
+  height: 75px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+
+.used_col{
+  background-color: #0000ee;
+}
+
+.hide{
+  visibility: hidden;
+}
+
+.total-points{
+  margin-top: 15px;
+}
