@@ -1,17 +1,19 @@
+import { Http } from '../../core/http/http';
 import { MainService } from '../../core/services/main.service';
 import { ExampleInterface } from './example.interface';
 
 export class ExampleService extends MainService<ExampleInterface> {
   
+  protected url: string = 'https://jsonplaceholder.typicode.com';
   constructor() {
-    super();
+    super(new Http());
   }
   
   get uri(): string {
-    return 'examples'
+    return '/users'
   }
 
-  async getExample(limit: number = 1): Promise<ExampleInterface> {
-    return this.http.get(`${this.uri}`,{ limit })
+  async getExample(): Promise<ExampleInterface> {
+    return this.http.get(`${this.url}${this.uri}`, {userId: 1})
   }
 }

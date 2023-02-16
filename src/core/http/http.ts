@@ -1,33 +1,30 @@
-import { HttpParamsOptions } from '../../core/decorators/http-params.decorator';
-import { HttpParams, HttpOptions, HttpInterface, HeaderType } from './types/http.type';
+import { HttpParams, HttpOptions, HttpInterface, HttpMethod } from './types/http.type';
 
 export class Http implements HttpInterface {
 
-  private readonly urlBase!: string;
-  private readonly headers?: HeaderType;
-
-  constructor(
-    private readonly options?: {
-      urlBase: string,
-      headers?: HeaderType
+  constructor() {}
+  async get<T>(url: string, query?: HttpParams, options?: HttpOptions): Promise<T> {
+    const params = new URL(url);
+    if (query) {
+      Object.keys(query).forEach(key => {
+        params.searchParams.append(key, query[key]);
+      });
     }
-  ) {
-    this.urlBase = options?.urlBase ?? '';
-    this.headers = options?.headers;
+    return await this.request<T>(HttpMethod.GET, params.toString(), options);
   }
 
-  @HttpParamsOptions
-  async get<T>(url: string, params?: HttpParams, options?: HttpOptions): Promise<T> {
+  async post<T>(url: string, payload: object, options?: HttpOptions): Promise<T> {
+    return await this.request<T>(HttpMethod.POST, url, {...options, body: JSON.stringify(payload)})
+  }
 
-    const response = await fetch(url, options);
+  async request<T>(method: HttpMethod, url: string, options?: HttpOptions): Promise<T> {
+    const request = new Request(url, {
+      method,
+      ...options
+    })
 
-    if (!response.ok) {
-      throw new Error(`Error http-status: ${response.status}`);
-    }
-
-    const data = await response.json() as T;
-
-    return data;
+    const response = await fetch(request);
+    return response.json() as T;
   }
 }
 
